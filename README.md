@@ -1,10 +1,19 @@
 # cloud device management toolkit
 
-## Setting
-### Env requirements:
-* docker
+## Support
+* azure iotedge
+    * list/get device/module info
+    * list/get/edit device/module shadow
+* azure iot device
+    * list/get device info
+    * list/get/edit device shadow
+* aws iot device
+    * list/get thing info
+    * list/get/edit thing shadow
+* aws greengrass (TODO)
+* aliyun (TODO)
 
-## Setup test env
+## Setup
 1. git clone this repo
 2. cd to this folder
 3. edit auth configuration ***(setting.ini)*** :
@@ -44,7 +53,10 @@
     ```bash
     docker run -it --rm --name sample-cli \
         -v $(pwd):/data --net host \
-        bibbylong/device-mgmt:1.0.3-amd64 bash
+        bibbylong/device-mgmt:1.0.6-amd64 bash
+    ```
+    ```bash
+    python3 ./sample.py -h
     ```
 5. or run by docker-compose
     ```bash
