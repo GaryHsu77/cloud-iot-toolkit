@@ -3,10 +3,10 @@
 ## Support
 * azure iotedge
     * list/get device/module info
-    * list/get/edit device/module shadow
+    * list/get/edit device/module twin
 * azure iot device
     * list/get device info
-    * list/get/edit device shadow
+    * list/get/edit device twin
 * aws iot device
     * list/get thing info
     * list/get/edit thing shadow
