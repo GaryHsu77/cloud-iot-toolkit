@@ -1,15 +1,21 @@
-# cloud device management toolkit
+# Cloud Device Management Toolkit
 
 ## Support
 * azure iotedge
     * list/get device/module info
     * list/get/edit device/module twin
+    * subscribe device D2C message
+    * invoke device/module direct command
 * azure iot device
     * list/get device info
     * list/get/edit device twin
+    * subscribe device D2C message
+    * invoke device direct command
 * aws iot device
     * list/get thing info
     * list/get/edit thing shadow
+    * subscribe device D2C message
+    * invoke thing job
 * aws greengrass (TODO)
 * aliyun (TODO)
 
