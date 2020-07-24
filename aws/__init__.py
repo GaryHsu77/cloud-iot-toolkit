@@ -193,7 +193,7 @@ access-token = {}""".format(self.setting['region_name'], port, token)))
         job_id = "{}_{}".format(device_id, datetime.datetime.now().strftime('%Y%m%d%H%M%S%f'))
         status, response = self.create_jobs([device_id], name, payload, job_id)
         if status <200 or status > 299:
-            return status, 'create command failed'
+            return status, {'error':'create command failed'}
 
         for i in range(retry_time):
             try:
@@ -205,11 +205,15 @@ access-token = {}""".format(self.setting['region_name'], port, token)))
                 time.sleep(1)
 
         if job_info['status'] == 'IN_PROGRESS' or job_info['status'] == 'QUEUED':
-            return 400, 'command panding'
+            return 400, {'error':'command panding'}
         elif job_info['status'] == 'SUCCEEDED':
-            return 200, json.loads(job_info['statusDetails']['detailsMap']['data'])
+            try:
+                json_object = json.loads(job_info['statusDetails']['detailsMap']['data'])
+                return 200, json_object
+            except ValueError as e:
+                return 200, {'data':job_info['statusDetails']['detailsMap']['data']}
         else:
-            return 400, 'process command failed'
+            return 400, {'error':'process command failed'}
 
     def get_shadow(self, device_id):
         response = self.shadow.get_thing_shadow(
