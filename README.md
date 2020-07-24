@@ -59,7 +59,7 @@
     ```bash
     docker run -it --rm --name sample-cli \
         -v $(pwd):/data --net host \
-        bibbylong/device-mgmt:1.0.6-amd64 bash
+        bibbylong/device-mgmt:1.0.8`-amd64 bash
     ```
     ```bash
     python3 ./sample.py -h
@@ -69,6 +69,7 @@
     docker-compose run --rm sample -h
     ```
 ## Sample
+* [source](https://github.com/GaryHsu77/cloud-iot-toolkit/blob/master/sample.py)
 * help
     ```bash
     ~ python3 ./sample.py -h
@@ -133,7 +134,7 @@
     >     -m device \
     >     -D mydev1?module=myModule
     > {
-    >   "name": "mydev1?module=thingspro-agent",
+    >   "name": "mydev1?module=myModule",
     >   "desired": {},
     >   "reported": {},
     >   "timestamp": "0001-01-01T00:00:00Z",
@@ -181,7 +182,7 @@
         -t azure \
         -m command \
         -D mydev1 \
-        -C thingspro-api-v1 \
+        -C api-v1 \
         -P '{"path":"/device/ethernets","method":"GET"}'
     code: 200
     response: {
@@ -206,7 +207,7 @@
     >     -t azure \
     >     -m command \
     >     -D mydev1?module=myModule \
-    >     -C thingspro-api-v1 \
+    >     -C api-v1 \
     >     -P '{"path":"/device/ethernets","method":"GET"}'
     > ```
 

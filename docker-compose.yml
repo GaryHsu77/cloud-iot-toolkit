@@ -14,7 +14,7 @@ services:
 
   device-mgmt:
     build: .
-    image: bibbylong/device-mgmt:1.0.6-amd64
+    image: bibbylong/device-mgmt:1.0.8-amd64
     container_name: device-mgmt
     volumes:
       - ./:/data
@@ -26,7 +26,7 @@ services:
 
   sample:
     build: .
-    image: bibbylong/device-mgmt:1.0.6-amd64
+    image: bibbylong/device-mgmt:1.0.8-amd64
     container_name: cloud-sample
     volumes:
       - ./:/data

@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setup(
     name= 'cloud-toolkit',
-    version= '0.7',
+    version= '1.0.8',
     url='https://github.com/GaryHsu77/cloud-iot-toolkit',
     keywords=['cloud', 'iot', 'azure', 'aws'],
     description= 'A toolkit help to management cloud iot.',
