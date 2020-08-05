@@ -36,6 +36,7 @@
     host = test.iot.ap-northeast-1.amazonaws.com
     access_key_id = test
     secret_access_key = test
+    fleet_indexing = true
     root_ca_path = ./aws/awsRootCA.crt
 
     #--------------------------------------------------------------------------------------------------------------------------
@@ -59,7 +60,7 @@
     ```bash
     docker run -it --rm --name sample-cli \
         -v $(pwd):/data --net host \
-        bibbylong/device-mgmt:1.0.8`-amd64 bash
+        bibbylong/device-mgmt:1.0.9-amd64 bash
     ```
     ```bash
     python3 ./sample.py -h

@@ -34,7 +34,10 @@ class AWSIoTOperation:
 
     def __init__(self, setting=None):
         self.setting = setting
-
+        self.fleet_indexing = False
+        if 'fleet_indexing' in self.setting:
+            if self.setting['fleet_indexing'] == 'true':
+                self.fleet_indexing = True
         # login by cli for update "~/.aws/credentials"
         if os.path.exists("~/.aws/credentials") == False:
             os.system("mkdir -p ~/.aws")
@@ -60,19 +63,28 @@ aws_secret_access_key={}""".format(self.setting['access_key_id'], self.setting['
         self.myAWSIoTMQTTClient = None
 
     def search_devices(self):
-        response = self.iot.search_index(
-            indexName='AWS_Things',
-            queryString='thingName: *',
-            maxResults=250,
-            queryVersion='2017-09-30'
-        )
+        if self.fleet_indexing == True:
+            response = self.iot.search_index(
+                indexName='AWS_Things',
+                queryString='thingName: *',
+                maxResults=250,
+                queryVersion='2017-09-30'
+            )
+        else:
+            response = self.iot.list_things()
+
         devices = []
         for device in response['things']:
             new_dev = {
                 'name': device['thingName'],
                 'desired': {}, 'reported': {}, 'timestamp': 0,
-                'connected': device['connectivity']['connected'],
+                'connected': False,
             }
+
+            if 'connectivity' in device:
+                new_dev['connected'] = device['connectivity']['connected']
+                new_dev['timestamp'] = device['connectivity']['timestamp']
+
             if 'shadow' not in device:
                 devices.append(new_dev)
                 continue
@@ -82,19 +94,35 @@ aws_secret_access_key={}""".format(self.setting['access_key_id'], self.setting['
                 new_dev['desired'] = shadow['desired']
             if 'reported' in shadow:
                 new_dev['reported'] = shadow['reported']
-            if 'timestamp' in device['connectivity']:
-                new_dev['timestamp'] = device['connectivity']['timestamp']
+
             devices.append(new_dev)
         self.things_content = devices
         return self.things_content
 
     def search_device(self, name):
-        response = self.iot.search_index(
-            indexName='AWS_Things',
-            queryString='thingName: '+name,
-            maxResults=250,
-            queryVersion='2017-09-30'
-        )
+        stream_body = self.shadow.get_thing_shadow(thingName=name)["payload"]
+        shadows_data = json.loads(stream_body.read())
+        response = {
+            'things': [
+                {
+                    'thingName': name,
+                    'connectivity': {'connected': False},
+                    'shadow': json.dumps(shadows_data['state']),
+                },
+            ]
+        }
+
+        if self.fleet_indexing == True:
+            index = self.iot.search_index(
+                indexName='AWS_Things',
+                queryString='thingName: '+name,
+                maxResults=250,
+                queryVersion='2017-09-30'
+            )
+            if len(index) > 0:
+                response['things'][0]['connectivity']['connected'] = index['things'][0]['connectivity']['connected']
+                response['things'][0]['connectivity']['timestamp'] = index['things'][0]['connectivity']['timestamp']
+
         devices = []
         for device in response['things']:
             new_dev = {
